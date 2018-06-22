@@ -6,23 +6,24 @@ defmodule RotationalCipher do
   iex> RotationalCipher.rotate("Attack at dawn", 13)
   "Nggnpx ng qnja"
   """
-  @alphabet "abcdefghijklmnopqrstuvwxyz"
-
   @spec rotate(text :: String.t(), shift :: integer) :: String.t()
   def rotate(text, shift) do
-    IO.puts(cipherWithShift(shift))
-    cipherStr = cipherWithShift(shift)
-    alphabetList = String.to_charlist(@alphabet)
     String.to_charlist(text)
-    |> Enum.map(fn(c) -> Enum.find_index(alphabetList, &(&1 == c)) end)
-    |> Enum.filter(&(&1 != nil))
-    |> Enum.map(&(String.at(cipherStr, &1)))
-    |> Enum.join("")
+    |> Enum.map(fn(c) -> getChar(c, shift) end)
+    |> List.to_string()
   end
 
-  @spec cipherWithShift(shift :: integer) :: String.t()
-  def cipherWithShift(shift) do
-    String.slice(@alphabet, shift..26) <> String.slice(@alphabet, 0..shift-1)
+  def getChar(charVal, shift) do 
+    case charVal do
+      charVal when charVal in 97..122 -> Enum.at(getAlephabetIndex(97, 122, shift), charVal-97)
+      charVal when charVal in 65..90  -> Enum.at(getAlephabetIndex(65, 90, shift), charVal-65)
+      charVal -> charVal
+    end
+  end
+
+  def getAlephabetIndex(startChar, endChar, shift) do
+    splitIndex = startChar + rem(shift, 26)
+    Enum.to_list(splitIndex..endChar) ++ if splitIndex-1 <= 0, do: [], else: Enum.to_list(startChar..splitIndex-1)
   end
 
 end

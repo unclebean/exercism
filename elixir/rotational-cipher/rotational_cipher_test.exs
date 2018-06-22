@@ -3,12 +3,12 @@ if !System.get_env("EXERCISM_TEST_EXAMPLES") do
 end
 
 ExUnit.start()
-ExUnit.configure(exclude: :pending, trace: true)
+ExUnit.configure(exclude: :ppending, trace: true)
 
 defmodule RotationalCipherTest do
   use ExUnit.Case
 
-  # @tag :pending
+  @tag :pending
   test "rotate a by 1" do
     plaintext = "a"
     shift = 1
@@ -29,15 +29,15 @@ defmodule RotationalCipherTest do
     assert RotationalCipher.rotate(plaintext, shift) == "a"
   end
 
-  # @tag :pending
+  @tag :pending
   test "rotate m by 13" do
     plaintext = "m"
     shift = 13
     assert RotationalCipher.rotate(plaintext, shift) == "z"
   end
 
-  @tag :pending
-  test "rotate n by 13 with wrap around alphabet" do
+  # @tag :pending
+  test "rotate n by 13 with wrap around alphabe" do
     plaintext = "n"
     shift = 13
     assert RotationalCipher.rotate(plaintext, shift) == "a"
