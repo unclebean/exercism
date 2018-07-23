@@ -1,14 +1,28 @@
 defmodule Bob do
   def hey(input) do
+    trimedInput = String.trim(input)
     cond do
-      Regex.match?(~r/^\s+$|^$/, input)  -> "Fine. Be that way!"
-      Regex.match?(~r/[A-Z\s']+\?$/, input) -> "Calm down, I know what I'm doing!"
-      Regex.match?(~r/[A-Z\s%^*@#$()!0-9]+[^a-z]\!$/, input) -> "Whoa, chill out!"
-      Regex.match?(~r/[A-Z\s]+$/, input) -> "Whoa, chill out!"
-      Regex.match?(~r/[^\x{0000}-\x{007F}]/, input) -> "Whoa, chill out!"
-      Regex.match?(~r/^[A-Z]+[\sa-z]+\?$/, input) -> "Sure."
-      Regex.match?(~r/^[0-9]+\?$/, input) -> "Sure."
-      Regex.match?(~r/^[A-Z]*.+[.!]*$/, input) -> "Whatever."
+      shouldSayChillOut(trimedInput) -> "Whoa, chill out!"
+      shouldSayCalmDown(trimedInput) -> "Calm down, I know what I'm doing!"
+      shouldSaySure(trimedInput) -> "Sure."
+      shouldSayFine(trimedInput) -> "Fine. Be that way!"
+      true -> "Whatever."
     end
   end
+
+  def shouldSayChillOut(input) do
+    Regex.match?(~r/[^a-z]+!$/, input) or
+    Regex.match?(~r/[A-Z\s]+$/, input) or
+    Regex.match?(~r/[^\x{0000}-\x{007F}]/, input)
+  end
+  def shouldSayCalmDown(input) do
+    Regex.match?(~r/[A-Z'\s]+\?$/, input)
+  end
+
+  def shouldSaySure(input) do
+    Regex.match?(~r/[a-z]+\?$/, input) or Regex.match?(~r/[0-9]{1}\?$/, input)
+  end
+
+  def shouldSayFine(input) do String.trim(input) === "" end
+
 end
